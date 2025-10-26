@@ -1,5 +1,5 @@
-//ENVIRONMENT VARIABLES
+# Environment variables 
 .env
 .env.local
 .env.development.local
-backend\.env
+backend/.env
