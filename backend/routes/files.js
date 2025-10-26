@@ -63,11 +63,19 @@ router.post('/upload', optionalAuth, upload.single('file'), async (req, res) => 
     const file = new File(fileData);
     await file.save();
 
-    // Generate QR code
-    const shareUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/download/${file.shortUrl}`;
-    const qrCodeData = await QRCode.toDataURL(shareUrl);
-    file.qrCode = qrCodeData;
-    await file.save();
+    // Build frontend share URL (use Vite default 5173 if FRONTEND_URL not provided)
+    const frontendBase = (process.env.FRONTEND_URL || 'http://localhost:5173').replace(/\/$/, '');
+    const shareUrl = `${frontendBase}/download/${file.shortUrl}`;
+
+    // Generate QR code (store as data URL)
+    try {
+      const qrCodeData = await QRCode.toDataURL(shareUrl);
+      file.qrCode = qrCodeData;
+      await file.save();
+    } catch (qrErr) {
+      // Log QR generation error but don't fail the upload
+      console.error('QR code generation failed:', qrErr.message || qrErr);
+    }
 
     res.status(201).json({
       message: 'File uploaded successfully',
@@ -104,6 +112,21 @@ router.get('/:shortUrl', async (req, res) => {
       return res.status(410).json({ message: 'File has expired' });
     }
 
+    // Construct share URL and QR code if missing
+    const frontendBase = (process.env.FRONTEND_URL || 'http://localhost:5173').replace(/\/$/, '');
+    const shareUrl = `${frontendBase}/download/${file.shortUrl}`;
+
+    // Generate QR code on-the-fly if missing
+    if (!file.qrCode) {
+      try {
+        const qrCodeData = await QRCode.toDataURL(shareUrl);
+        file.qrCode = qrCodeData;
+        await file.save();
+      } catch (qrErr) {
+        console.error('QR code generation failed:', qrErr.message || qrErr);
+      }
+    }
+
     res.json({
       file: {
         id: file._id,
@@ -112,7 +135,10 @@ router.get('/:shortUrl', async (req, res) => {
         mimeType: file.mimeType,
         requiresPin: !!file.securityPin,
         expiresAt: file.expiresAt,
-        downloadCount: file.downloadCount
+        downloadCount: file.downloadCount,
+        shortUrl: file.shortUrl,
+        shareUrl: shareUrl,
+        qrCode: file.qrCode
       }
     });
   } catch (error) {

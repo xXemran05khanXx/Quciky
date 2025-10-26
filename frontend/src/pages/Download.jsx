@@ -95,6 +95,28 @@ function Download() {
             <div className="alert alert-error">{error}</div>
           )}
 
+          {/* Share link & QR code */}
+          {fileInfo.shareUrl && (
+            <div style={{ marginTop: '1rem' }}>
+              <p><strong>Share Link:</strong></p>
+              <input
+                type="text"
+                value={fileInfo.shareUrl}
+                readOnly
+                className="form-input"
+                onClick={(e) => e.target.select()}
+                style={{ marginBottom: '0.75rem' }}
+              />
+            </div>
+          )}
+
+          {fileInfo.qrCode && (
+            <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+              <p><strong>QR Code:</strong></p>
+              <img src={fileInfo.qrCode} alt="QR Code" style={{ maxWidth: '200px', margin: '0.5rem auto' }} />
+            </div>
+          )}
+
           <div style={{ marginBottom: '1rem' }}>
             <p style={{ color: '#6b7280', marginBottom: '0.5rem' }}>
               <strong>Downloads:</strong> {fileInfo.downloadCount}
