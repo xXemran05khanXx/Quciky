@@ -63,8 +63,23 @@ router.post('/upload', optionalAuth, upload.single('file'), async (req, res) => 
     const file = new File(fileData);
     await file.save();
 
-    // Build frontend share URL (use Vite default 5173 if FRONTEND_URL not provided)
-    const frontendBase = (process.env.FRONTEND_URL || 'http://localhost:5173').replace(/\/$/, '');
+    // Build frontend share URL:
+    const getFrontendBase = (req) => {
+      if (process.env.FRONTEND_URL) return process.env.FRONTEND_URL.replace(/\/$/, '');
+      // Use X-Forwarded-Proto and X-Forwarded-Host when behind proxies
+      const xfProto = req.get('X-Forwarded-Proto');
+      const xfHost = req.get('X-Forwarded-Host') || req.get('X-Forwarded-Server');
+      if (xfProto && xfHost) return `${xfProto}://${xfHost}`;
+      // Use origin header if present
+      const origin = req.get('origin');
+      if (origin) return origin.replace(/\/$/, '');
+      // Use protocol and host from request
+      const host = req.get('host');
+      if (host) return `${req.protocol}://${host}`;
+      return 'http://localhost:5173';
+    };
+
+    const frontendBase = getFrontendBase(req);
     const shareUrl = `${frontendBase}/download/${file.shortUrl}`;
 
     // Generate QR code (store as data URL)
@@ -112,8 +127,20 @@ router.get('/:shortUrl', async (req, res) => {
       return res.status(410).json({ message: 'File has expired' });
     }
 
-    // Construct share URL and QR code if missing
-    const frontendBase = (process.env.FRONTEND_URL || 'http://localhost:5173').replace(/\/$/, '');
+    // Construct share URL using same helper so result matches upload-generated link
+    const getFrontendBase = (req) => {
+      if (process.env.FRONTEND_URL) return process.env.FRONTEND_URL.replace(/\/$/, '');
+      const xfProto = req.get('X-Forwarded-Proto');
+      const xfHost = req.get('X-Forwarded-Host') || req.get('X-Forwarded-Server');
+      if (xfProto && xfHost) return `${xfProto}://${xfHost}`;
+      const origin = req.get('origin');
+      if (origin) return origin.replace(/\/$/, '');
+      const host = req.get('host');
+      if (host) return `${req.protocol}://${host}`;
+      return 'http://localhost:5173';
+    };
+
+    const frontendBase = getFrontendBase(req);
     const shareUrl = `${frontendBase}/download/${file.shortUrl}`;
 
     // Generate QR code on-the-fly if missing
