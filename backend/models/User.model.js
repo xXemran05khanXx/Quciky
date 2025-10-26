@@ -1,14 +1,7 @@
-import mongoose from 'mongoose';
-import bcrypt from 'bcryptjs';
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 
-export const userSchema = new mongoose.Schema({
-  username: {
-    type: String,
-    trim: true,
-    default: function() {
-      return this.email ? this.email.split('@')[0] : '';
-    }
-  },
+const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
@@ -22,13 +15,12 @@ export const userSchema = new mongoose.Schema({
   },
   tier: {
     type: String,
-    enum: ['anonymous', 'free', 'premium'],
-    default: 'free'
+    enum: ['anonymous', 'signed', 'paid'],
+    default: 'signed'
   },
-  subscriptionStatus: {
-    type: String,
-    enum: ['active', 'expired', 'none'],
-    default: 'none'
+  createdAt: {
+    type: Date,
+    default: Date.now
   },
   subscriptionEndDate: {
     type: Date,
@@ -37,56 +29,25 @@ export const userSchema = new mongoose.Schema({
   uploadCount: {
     type: Number,
     default: 0
-  },
-  totalDownloads: {
-    type: Number,
-    default: 0
-  },
-  lastLoginAt: {
-    type: Date,
-    default: null
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now
   }
 });
 
 // Hash password before saving
-const bcrypt = require('bcrypt');
-const userSchema = new mongoose.Schema({
-  email: { type: String, unique: true, required: true },
-  password: { type: String, required: true },
-  tier: { type: String, enum: ['anonymous', 'signed', 'paid'], default: 'signed' }
-});
-
-userSchema.pre('save', async function (next) {
+userSchema.pre('save', async function(next) {
   if (!this.isModified('password')) return next();
-  this.password = await bcrypt.hash(this.password, 10);
-  next();
+  
+  try {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
+  } catch (error) {
+    next(error);
+  }
 });
 
-userSchema.methods.comparePassword = async function (password) {
-  return bcrypt.compare(password, this.password);
-};
-
-
-// Compare entered password
+// Method to compare password
 userSchema.methods.comparePassword = async function(candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
-};
-
-// Check premium status
-userSchema.methods.isPremium = function() {
-  return this.tier === 'premium' && this.subscriptionStatus === 'active';
-};
-
-// Auto-expire subscriptions (optional)
-userSchema.methods.checkSubscriptionStatus = function() {
-  if (this.subscriptionEndDate && this.subscriptionEndDate < new Date()) {
-    this.tier = 'free';
-    this.subscriptionStatus = 'expired';
-  }
 };
 
 module.exports = mongoose.model('User', userSchema);

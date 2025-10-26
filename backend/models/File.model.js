@@ -1,91 +1,69 @@
-import mongoose from 'mongoose';
-import shortid from 'shortid';
+const mongoose = require('mongoose');
+const shortid = require('shortid');
 
-export const fileSchema = new mongoose.Schema({
-  _id: {
+const fileSchema = new mongoose.Schema({
+  originalName: {
     type: String,
-    default: shortid.generate,
+    required: true
   },
   fileName: {
     type: String,
-    required: true,
+    required: true
   },
   filePath: {
     type: String,
-    required: true,
+    required: true
   },
   fileSize: {
     type: Number,
-    required: true,
-    min: [1, 'File size must be greater than 0 bytes'],
-    max: [1073741824, 'File size exceeds the maximum limit of 1GB'],
+    required: true
   },
   mimeType: {
     type: String,
-    required: true,
+    required: true
   },
   shortUrl: {
     type: String,
     unique: true,
-    default: shortid.generate,
+    default: () => shortid.generate()
   },
   qrCode: {
     type: String,
-    unique: true,
+    default: null
   },
   securityPin: {
     type: String,
-    default: null,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  lastAccessedAt: {
-    type: Date,
-    default: null,
+    default: null
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    default: null,
+    default: null
   },
   userTier: {
     type: String,
-    enum: ['anonymous', 'free', 'premium'],
-    default: 'anonymous',
-    required: true,
+    enum: ['anonymous', 'signed', 'paid'],
+    required: true
   },
   expiresAt: {
     type: Date,
-    default: null,
-    index: { expires: 0 },
+    required: true
   },
   downloadCount: {
     type: Number,
-    default: 0,
+    default: 0
   },
-  lastDownloadedAt: {
+  createdAt: {
     type: Date,
-    default: null,
+    default: Date.now
   },
-  storageProvider: {
-    type: String,
-    enum: ['local', 's3', 'cloudinary'],
-    default: 'local',
-  },
-});
-
-// Auto-calculate expiry based on user tier
-fileSchema.pre('save', function (next) {
-  if (!this.expiresAt) {
-    const now = new Date();
-    const validityMinutes =
-      this.userTier === 'premium' ? 1440 :
-      this.userTier === 'free' ? 60 : 30;
-    this.expiresAt = new Date(now.getTime() + validityMinutes * 60000);
+  lastAccessed: {
+    type: Date,
+    default: null
   }
-  next();
 });
 
-export const File = mongoose.model('File', fileSchema);
+// Index for expiration
+fileSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+
+module.exports = mongoose.model('File', fileSchema);

@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
-const User = require('../models/User.model.js');
-const { auth } = require('../middleware/auth');
+const User = require('../models/User.model');
+const { auth } = require('../middleware/auth.middleware');
 
 // Register new user
 router.post('/register', async (req, res) => {
@@ -74,12 +74,11 @@ router.post('/login', async (req, res) => {
 
     // Create JWT token
     const token = jwt.sign(
-        { userId: user._id }, 
-        { secret: process.env.JWT_SECRET}, 
-        { expiresIn: process.env.JWT_EXPIRY }
+      { userId: user._id },
+      process.env.JWT_SECRET || 'your_jwt_secret_key',
+      { expiresIn: '7d' }
     );
-
-
+    
     res.json({
       message: 'Login successful',
       token,
