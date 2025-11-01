@@ -71,53 +71,92 @@ function Dashboard() {
         </div>
 
         {/* User Tier Card */}
-        <div className="card" style={{ marginBottom: '2rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div>
-              <h3 style={{ marginBottom: '0.5rem', color: 'var(--text-black)' }}>Your Plan</h3>
-              <span className={`tier-badge tier-${user?.tier}`}>
-                {user?.tier?.toUpperCase()}
-              </span>
+        <div className="user-plan-card" style={{ marginBottom: '2rem' }}>
+          <div className="plan-content">
+            <div className="plan-info">
+              <div className="plan-header">
+                <div>
+                  <h3>Your Plan</h3>
+                 
+                </div>
+              </div>
+              <div className="plan-details">
+
+              </div>
             </div>
-            {user?.tier !== 'paid' && (
-              <button className="btn btn-success" onClick={handleUpgrade}>
-                Upgrade to Premium
-              </button>
-            )}
+            <div className="plan-upgrade-section">
+              {user?.tier !== 'paid' && (
+                <button className="btn btn-success" onClick={handleUpgrade}>
+                  <span>🚀</span>
+                  Upgrade to Premium
+                </button>
+              )}
+              {user?.tier === 'paid' && (
+                <div className="premium-badge">
+                  <span>✨</span>
+                  Premium Active
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
         {/* Analytics Cards */}
         {analytics && (
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
-            gap: '1rem', 
-            marginBottom: '2rem' 
-          }}>
-            <div className="card">
-              <h4 style={{ color: '#6b7280', marginBottom: '0.5rem' }}>Total Uploads</h4>
-              <p style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--primary-blue)' }}>
+          <div className="analytics-grid">
+            <div className="analytics-card uploads">
+              <div className="analytics-card-header">
+                <div className="analytics-card-icon">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 15L17 10H14V3H10V10H7L12 15Z" fill="currentColor"/>
+                    <path d="M20 18H4V20H20V18Z" fill="currentColor"/>
+                  </svg>
+                </div>
+                <div className="analytics-card-info">
+                  <h4 className="analytics-card-title">Total Uploads</h4>
+                  <p className="analytics-card-subtitle">Files uploaded to date</p>
+                </div>
+              </div>
+              <div className="analytics-card-value">
                 {analytics.totalUploads}
-              </p>
+              </div>
             </div>
-            <div className="card">
-              <h4 style={{ color: '#6b7280', marginBottom: '0.5rem' }}>Total Downloads</h4>
-              <p style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--primary-green)' }}>
-                {analytics.totalDownloads}
-              </p>
-            </div>
-            <div className="card">
-              <h4 style={{ color: '#6b7280', marginBottom: '0.5rem' }}>Active Files</h4>
-              <p style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--text-black)' }}>
+            
+            <div className="analytics-card active">
+              <div className="analytics-card-header">
+                <div className="analytics-card-icon">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.89 22 5.99 22H18C19.1 22 20 21.1 20 20V8L14 2ZM18 20H6V4H13V9H18V20Z" fill="currentColor"/>
+                  </svg>
+                </div>
+                <div className="analytics-card-info">
+                  <h4 className="analytics-card-title">Active Files</h4>
+                  <p className="analytics-card-subtitle">Currently available files</p>
+                </div>
+              </div>
+              <div className="analytics-card-value">
                 {analytics.activeFiles}
-              </p>
+              </div>
             </div>
-            <div className="card">
-              <h4 style={{ color: '#6b7280', marginBottom: '0.5rem' }}>Total Size</h4>
-              <p style={{ fontSize: '2rem', fontWeight: 'bold', color: '#6b7280' }}>
-                {(analytics.totalSize / 1024 / 1024).toFixed(2)} MB
-              </p>
+            
+            <div className="analytics-card size">
+              <div className="analytics-card-header">
+                <div className="analytics-card-icon">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 2C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V8L14 2H6ZM6 4H13V9H18V20H6V4Z" fill="currentColor"/>
+                    <circle cx="10" cy="16" r="2" fill="currentColor"/>
+                    <circle cx="14" cy="12" r="1" fill="currentColor"/>
+                  </svg>
+                </div>
+                <div className="analytics-card-info">
+                  <h4 className="analytics-card-title">Total Size</h4>
+                  <p className="analytics-card-subtitle">Storage space used</p>
+                </div>
+              </div>
+              <div className="analytics-card-value">
+                {(analytics.totalSize / 1024 / 1024).toFixed(1)}
+                <span className="analytics-unit">MB</span>
+              </div>
             </div>
           </div>
         )}
@@ -142,50 +181,59 @@ function Dashboard() {
         </div>
 
         {/* Files List */}
-        <div className="card">
-          {files.length === 0 ? (
-            <p style={{ textAlign: 'center', color: '#6b7280', padding: '2rem' }}>
-              No files uploaded yet. Go to <a href="/" style={{ color: 'var(--primary-blue)' }}>home</a> to upload your first file!
-            </p>
-          ) : (
-            <div style={{ overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                <thead>
-                  <tr style={{ borderBottom: '2px solid var(--border-color)' }}>
-                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>File Name</th>
-                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>Size</th>
-                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>Downloads</th>
-                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>Expires</th>
-                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>Short URL</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {files.map((file) => (
-                    <tr key={file._id} style={{ borderBottom: '1px solid var(--border-color)' }}>
-                      <td style={{ padding: '0.75rem' }}>{file.originalName}</td>
-                      <td style={{ padding: '0.75rem' }}>
-                        {(file.fileSize / 1024 / 1024).toFixed(2)} MB
-                      </td>
-                      <td style={{ padding: '0.75rem' }}>{file.downloadCount}</td>
-                      <td style={{ padding: '0.75rem' }}>
-                        {new Date(file.expiresAt).toLocaleDateString()}
-                      </td>
-                      <td style={{ padding: '0.75rem' }}>
-                        <code style={{ 
-                          backgroundColor: '#f3f4f6', 
-                          padding: '0.25rem 0.5rem', 
-                          borderRadius: '4px',
-                          fontSize: '0.875rem'
-                        }}>
-                          {file.shortUrl}
-                        </code>
-                      </td>
+        <div className="files-table-card">
+          <div className="files-table-header">
+            <h3>File History</h3>
+          </div>
+          
+          <div className="files-table-content">
+            {files.length === 0 ? (
+              <div className="empty-state">
+                <div className="empty-state-content">
+                  <h4>No Files Yet</h4>
+                  <p>No files uploaded yet. Upload your first file to get started!</p>
+                  <button className="btn btn-primary" onClick={() => navigate('/')}>
+                    Upload Now
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="table-responsive">
+                <table className="files-table">
+                  <thead>
+                    <tr>
+                      <th>File Name</th>
+                      <th>Size</th>
+                      <th>Downloads</th>
+                      <th>Expires</th>
+                      <th>Short URL</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
+                  </thead>
+                  <tbody>
+                    {files.map((file) => (
+                      <tr key={file._id}>
+                        <td>
+                          <div className="file-info">
+                            <span className="file-name">{file.originalName}</span>
+                          </div>
+                        </td>
+                        <td>{(file.fileSize / 1024 / 1024).toFixed(2)} MB</td>
+                        <td>
+                          <span className="download-count">{file.downloadCount}</span>
+                        </td>
+                        <td>{new Date(file.expiresAt).toLocaleDateString()}</td>
+                        <td>
+                          <code className="short-url-code">
+                            {file.shortUrl}
+                          </code>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
