@@ -52,133 +52,326 @@ function Home() {
     <div style={{ padding: '2rem 0' }}>
       <div className="container">
         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-          <h1 style={{ fontSize: '2.5rem', marginBottom: '1rem', color: 'var(--text-black)' }}>
-            Fast & Secure File Sharing
+          <h1 style={{ fontSize: '2.5rem', marginBottom: '1rem', background: 'linear-gradient(135deg, #00ff88 0%, #00cc6a 50%, #10d876 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', filter: 'drop-shadow(0 0 20px rgba(0, 255, 136, 0.3))' }}>
+            ⚡ Lightning Fast File Sharing
           </h1>
-          <p style={{ fontSize: '1.25rem', color: '#6b7280' }}>
-            Share files, images, and documents through short URLs and QR codes
+          <p style={{ fontSize: '1.25rem', color: '#a1a1aa' }}>
+            Share files instantly with military-grade encryption & QR codes ✨
           </p>
         </div>
 
         {/* Tier Information */}
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
-          gap: '1.5rem', 
-          marginBottom: '3rem' 
-        }}>
-          <div className="card">
-            <h3 style={{ color: 'var(--primary-blue)', marginBottom: '0.5rem' }}>Anonymous</h3>
-            <p style={{ color: '#6b7280', marginBottom: '0.5rem' }}>Free</p>
-            <ul style={{ listStyle: 'none', color: '#374151' }}>
-              <li>✓ Up to 5MB</li>
-              <li>✓ 1 day validity</li>
-              <li>✓ Basic sharing</li>
+        <div className="tier-cards-container">
+          <div className="tier-card tier-card-anonymous">
+            <div className="tier-card-header">
+              <div className="tier-icon tier-icon-anonymous">
+                🕶
+              </div>
+              <div>
+                <h3 className="tier-card-title tier-card-title-anonymous">Guest </h3>
+                <span className="tier-badge tier-badge-basic">Limited Access</span>
+              </div>
+            </div>
+            <div className="tier-card-price">
+              <span className="tier-card-price-main">Free</span>
+            </div>
+            <ul className="tier-card-features">
+              <li className="tier-card-feature">
+                <span className="tier-card-feature-icon tier-card-feature-icon-anonymous">⚠️</span>
+                Only 5MB file size
+              </li>
+              <li className="tier-card-feature">
+                <span className="tier-card-feature-icon tier-card-feature-icon-anonymous">⏰</span>
+                Expires in 24 hours
+              </li>
+              <li className="tier-card-feature">
+                <span className="tier-card-feature-icon tier-card-feature-icon-anonymous">📤</span>
+                Basic sharing only
+              </li>
+              <li className="tier-card-feature tier-feature-disabled">
+                <span className="tier-card-feature-icon tier-card-feature-icon-disabled">❌</span>
+                No file history
+              </li>
+              <li className="tier-card-feature tier-feature-disabled">
+                <span className="tier-card-feature-icon tier-card-feature-icon-disabled">❌</span>
+                No security features
+              </li>
             </ul>
           </div>
-          <div className="card" style={{ borderColor: 'var(--primary-blue)', borderWidth: '2px' }}>
-            <h3 style={{ color: 'var(--primary-blue)', marginBottom: '0.5rem' }}>Signed (Free)</h3>
-            <p style={{ color: '#6b7280', marginBottom: '0.5rem' }}>Free</p>
-            <ul style={{ listStyle: 'none', color: '#374151' }}>
-              <li>✓ Up to 50MB</li>
-              <li>✓ 7 days validity</li>
-              <li>✓ File history</li>
-              <li>✓ Security PIN</li>
+
+          <div className="tier-card tier-card-signed">
+            <div className="tier-card-header">
+              <div className="tier-icon tier-icon-signed">
+                ✪
+              </div>
+              <div>
+                <h3 className="tier-card-title tier-card-title-signed">Pro</h3>
+                <span className="tier-badge tier-badge-pro">Good Value</span>
+              </div>
+            </div>
+            <div className="tier-card-price">
+              <span className="tier-card-price-main">Free</span>
+              <span className="tier-card-price-period">with signup</span>
+            </div>
+            <ul className="tier-card-features">
+              <li className="tier-card-feature">
+                <span className="tier-card-feature-icon tier-card-feature-icon-signed">✅</span>
+                Up to 50MB files
+              </li>
+              <li className="tier-card-feature">
+                <span className="tier-card-feature-icon tier-card-feature-icon-signed">📅</span>
+                7 days storage
+              </li>
+              <li className="tier-card-feature">
+                <span className="tier-card-feature-icon tier-card-feature-icon-signed">📋</span>
+                Basic file history
+              </li>
+              <li className="tier-card-feature">
+                <span className="tier-card-feature-icon tier-card-feature-icon-signed">🔒</span>
+                PIN protection
+              </li>
+              <li className="tier-card-feature tier-feature-disabled">
+                <span className="tier-card-feature-icon tier-card-feature-icon-disabled">❌</span>
+                No analytics
+              </li>
             </ul>
+            <button 
+              className="tier-card-cta tier-card-cta-signed"
+              onClick={() => navigate('/register')}
+            >
+              Sign-up
+            </button>
           </div>
-          <div className="card" style={{ borderColor: 'var(--primary-green)', borderWidth: '2px', backgroundColor: '#f0fdf4' }}>
-            <h3 style={{ color: 'var(--primary-green)', marginBottom: '0.5rem' }}>Premium</h3>
-            <p style={{ color: '#6b7280', marginBottom: '0.5rem' }}>₹ 99/month</p>
-            <ul style={{ listStyle: 'none', color: '#374151' }}>
-              <li>✓ Up to 500MB</li>
-              <li>✓ 30 days validity</li>
-              <li>✓ Analytics</li>
-              <li>✓ Priority support</li>
+
+          <div className="tier-card tier-card-premium tier-card-spotlight">
+            <div className="tier-card-header">
+              <div className="tier-icon tier-icon-premium">
+                🜲
+              </div>
+              <div>
+                <h3 className="tier-card-title tier-card-title-premium">Premium</h3>
+                <span className="tier-badge tier-badge-premium">Best Value</span>
+              </div>
+            </div>
+            <div className="tier-card-price">
+              <span className="tier-card-price-main">₹99</span>
+              <span className="tier-card-price-period">/month</span>
+              <div className="price-comparison">
+                <span className="original-price">₹299</span>
+                <span className="discount-badge">67% OFF</span>
+              </div>
+            </div>
+            <ul className="tier-card-features">
+              <li className="tier-card-feature">
+                <span className="tier-card-feature-icon tier-card-feature-icon-premium">🚀</span>
+                Up to 500MB files
+              </li>
+              <li className="tier-card-feature">
+                <span className="tier-card-feature-icon tier-card-feature-icon-premium">⏳</span>
+                30 days storage
+              </li>
+              <li className="tier-card-feature">
+                <span className="tier-card-feature-icon tier-card-feature-icon-premium">📊</span>
+                Advanced analytics
+              </li>
+              <li className="tier-card-feature">
+                <span className="tier-card-feature-icon tier-card-feature-icon-premium">🛡️</span>
+                Military-grade security
+              </li>
+              <li className="tier-card-feature">
+                <span className="tier-card-feature-icon tier-card-feature-icon-premium">⚡</span>
+                Priority support 24/7
+              </li>
+              <li className="tier-card-feature premium-exclusive">
+                <span className="tier-card-feature-icon tier-card-feature-icon-premium">💎</span>
+                Custom branding
+              </li>
+              <li className="tier-card-feature premium-exclusive">
+                <span className="tier-card-feature-icon tier-card-feature-icon-premium">📈</span>
+                Detailed analytics
+              </li>
             </ul>
+            <button className="tier-card-cta tier-card-cta-premium">
+              🔥 Upgrade
+            </button>
           </div>
         </div>
 
         {/* Upload Section */}
-        <div className="card" style={{ maxWidth: '600px', margin: '0 auto' }}>
-          <h2 style={{ marginBottom: '1.5rem', color: 'var(--text-black)' }}>Upload File</h2>
+        <div className="upload-container" style={{ maxWidth: '700px', margin: '0 auto' }}>
+          <div className="upload-header">
+            <h2 className="upload-title">Upload Your File</h2>
+            <p className="upload-subtitle">Drag, drop, and share in seconds ⚡</p>
+          </div>
           
           {error && (
             <div className="alert alert-error">{error}</div>
           )}
 
           {uploadResult ? (
-            <div>
-              <div className="alert alert-success">
-                File uploaded successfully!
+            <div className="upload-success">
+              <div className="success-icon">
+                ✓
               </div>
-              <div style={{ marginTop: '1rem' }}>
-                <p><strong>File:</strong> {uploadResult.originalName}</p>
-                <p><strong>Short URL:</strong> {uploadResult.shortUrl}</p>
-                <p><strong>Share Link:</strong></p>
-                <input 
-                  type="text" 
-                  value={uploadResult.shareUrl} 
-                  readOnly 
-                  className="form-input"
-                  style={{ marginBottom: '1rem' }}
-                  onClick={(e) => e.target.select()}
-                />
+              <h3 style={{ color: 'var(--primary-green)', marginBottom: '1rem', fontSize: '1.5rem' }}>
+                🎉 Upload Successful!
+              </h3>
+              
+              <div style={{ marginBottom: '2rem' }}>
+                <div style={{ 
+                  background: 'white', 
+                  padding: '1.5rem', 
+                  borderRadius: '12px',
+                  border: '1px solid #e5e7eb',
+                  marginBottom: '1rem'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+                    <div className="file-icon">📄</div>
+                    <div>
+                      <h4 style={{ margin: 0, color: 'var(--text-black)' }}>{uploadResult.originalName}</h4>
+                      <p style={{ margin: 0, color: '#6b7280', fontSize: '0.9rem' }}>
+                        Short URL: <strong>{uploadResult.shortUrl}</strong>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="share-link-container">
+                  <input 
+                    type="text" 
+                    value={uploadResult.shareUrl} 
+                    readOnly 
+                    className="share-link-input"
+                    onClick={(e) => e.target.select()}
+                  />
+                  <button 
+                    className="copy-btn"
+                    onClick={() => {
+                      navigator.clipboard.writeText(uploadResult.shareUrl);
+                      // You could add a toast notification here
+                    }}
+                  >
+                    📋 Copy
+                  </button>
+                </div>
+
                 {uploadResult.qrCode && (
-                  <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-                    <p><strong>QR Code:</strong></p>
-                    <img src={uploadResult.qrCode} alt="QR Code" style={{ maxWidth: '200px', margin: '1rem auto' }} />
+                  <div style={{ textAlign: 'center', marginTop: '1.5rem' }}>
+                    <p style={{ fontWeight: '600', marginBottom: '1rem', color: 'var(--text-black)' }}>
+                      📱 Scan QR Code to Share
+                    </p>
+                    <div className="qr-code-container">
+                      <img 
+                        src={uploadResult.qrCode} 
+                        alt="QR Code" 
+                        style={{ maxWidth: '150px', height: 'auto', borderRadius: '8px' }} 
+                      />
+                    </div>
                   </div>
                 )}
-                <button 
-                  className="btn btn-primary" 
-                  onClick={() => setUploadResult(null)}
-                  style={{ width: '100%' }}
-                >
-                  Upload Another File
-                </button>
               </div>
+
+              <button 
+                className="modern-upload-btn" 
+                onClick={() => setUploadResult(null)}
+                style={{ 
+                  background: 'linear-gradient(135deg, var(--primary-green), var(--hover-green))',
+                  maxWidth: '300px',
+                  margin: '0 auto'
+                }}
+              >
+                🚀 Upload Another File
+              </button>
             </div>
           ) : (
             <>
               <div 
                 {...getRootProps()} 
-                className={`upload-area ${isDragActive ? 'active' : ''}`}
+                className={`modern-upload-area ${isDragActive ? 'active' : ''}`}
               >
                 <input {...getInputProps()} />
+                
                 {file ? (
-                  <div>
-                    <p style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>📄 {file.name}</p>
-                    <p style={{ color: '#6b7280' }}>{(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                  <div className="file-preview">
+                    <div className="file-info">
+                      <div className="file-icon">
+                        {file.type.startsWith('image/') ? '🖼️' : 
+                         file.type.includes('pdf') ? '📄' : 
+                         file.type.includes('video') ? '🎥' : 
+                         file.type.includes('audio') ? '🎵' : '📁'}
+                      </div>
+                      <div className="file-details">
+                        <h4>{file.name}</h4>
+                        <p>{(file.size / 1024 / 1024).toFixed(2)} MB • {file.type || 'Unknown type'}</p>
+                      </div>
+                    </div>
                   </div>
                 ) : (
                   <div>
-                    <p style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>
-                      {isDragActive ? '📥 Drop file here' : '📤 Drag & drop or click to select'}
+                    <div className="upload-icon-container">
+                      <span className="upload-icon">
+                        {isDragActive ? '✚' : '📄'}
+                      </span>
+                    </div>
+                    <h3 className="upload-text">
+                      {isDragActive ? 'Drop your file here!' : 'Choose file or drag & drop'}
+                    </h3>
+                    <p className="upload-subtext">
+                      {isDragActive ? 'Release to upload' : '• Supports all file types • '}
                     </p>
-                    <p style={{ color: '#6b7280' }}>Max file size depends on your tier</p>
+                    {!isDragActive && (
+                      <div style={{ marginTop: '1rem' }}>
+                        <span style={{ 
+                          display: 'inline-block',
+                          padding: '0.5rem 1rem',
+                          background: 'linear-gradient(135deg, #f1f5f9, #e2e8f0)',
+                          borderRadius: '20px',
+                          fontSize: '0.875rem',
+                          color: '#475569',
+                          fontWeight: '500'
+                        }}>
+                          
+                        </span>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
 
-              <div className="form-group" style={{ marginTop: '1.5rem' }}>
-                <label className="form-label">Security PIN (optional)</label>
-                <input
-                  type="text"
-                  className="form-input"
-                  value={pin}
-                  onChange={(e) => setPin(e.target.value)}
-                  placeholder="Enter a PIN to protect your file"
-                  maxLength="6"
-                />
+              <div className="modern-form-group">
+                <label className="modern-form-label">⛊ Security PIN </label>
+                <div className="pin-input-container">
+                  <input
+                    type="text"
+                    className="modern-form-input pin-input"
+                    value={pin}
+                    onChange={(e) => setPin(e.target.value)}
+                    placeholder="Enter PIN  🗝"
+                    maxLength="6"
+                  />
+                </div>
+                <small style={{ color: '#6b7280', fontSize: '0.875rem', marginTop: '0.5rem', display: 'block' }}>
+                  Add an 6 digit PIN to secure your file
+                </small>
               </div>
 
               <button
-                className="btn btn-primary"
+                className="modern-upload-btn"
                 onClick={handleUpload}
                 disabled={!file || uploading}
-                style={{ width: '100%', marginTop: '1rem' }}
               >
-                {uploading ? 'Uploading...' : 'Upload File'}
+                {uploading ? (
+                  <>
+                    <span style={{ display: 'inline-block', marginRight: '0.5rem', animation: 'spin 1s linear infinite' }}>
+                      ⏳
+                    </span>
+                    Uploading Your File...
+                  </>
+                ) : (
+                  <>
+                     Upload  ⌯⌲
+                  </>
+                )}
               </button>
             </>
           )}

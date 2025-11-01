@@ -2,7 +2,6 @@ import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
-// Create axios instance
 const api = axios.create({
   baseURL: API_URL,
   headers: {
@@ -10,7 +9,6 @@ const api = axios.create({
   }
 });
 
-// Add token to requests if available
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
@@ -19,14 +17,12 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Auth API
 export const authAPI = {
   register: (email, password) => api.post('/auth/register', { email, password }),
   login: (email, password) => api.post('/auth/login', { email, password }),
   getMe: () => api.get('/auth/me')
 };
 
-// Files API
 export const filesAPI = {
   upload: (formData) => {
     return api.post('/files/upload', formData, {
@@ -49,7 +45,6 @@ export const filesAPI = {
   }
 };
 
-// Users API
 export const usersAPI = {
   getProfile: () => api.get('/users/profile'),
   getFiles: () => api.get('/users/files'),
